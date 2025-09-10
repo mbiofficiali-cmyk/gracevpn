@@ -1,0 +1,24 @@
+# === Android / Gradle ===
+*.iml
+.gradle/
+build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+out/
+generated/
+navigation.json
+
+# === Android Studio ===
+.idea/
+*.ipr
+*.iws
+
+# === Keystore (امضای انتشار) ===
+*.keystore
+*.jks
+
+# === OS junk ===
+.DS_Store
+Thumbs.db
