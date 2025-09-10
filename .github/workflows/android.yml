@@ -20,18 +20,19 @@ jobs:
           java-version: 17
           cache: gradle
 
-      # نصب SDK و قبول لایسنس‌ها (برای خطای "SDK location not found")
+      # نصب SDK و قبول لایسنس‌ها
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Create local.properties (sdk.dir)
-        run: echo "sdk.dir=$ANDROID_SDK_ROOT" >> local.properties
+      # ساختن local.properties تا Gradle بداند SDK کجاست
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      - name: Make gradlew executable
+      - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+      - name: Build Debug APK (verbose)
+        run: ./gradlew --version && ./gradlew assembleDebug --stacktrace --info
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
