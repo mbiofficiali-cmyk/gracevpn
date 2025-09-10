@@ -2,13 +2,14 @@ name: Android CI
 
 on:
   push:
-    branches: [ master ]        # شاخه‌ات master است
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,6 +19,13 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
+
+      # نصب SDK و قبول لایسنس‌ها (برای خطای "SDK location not found")
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Create local.properties (sdk.dir)
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" >> local.properties
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
