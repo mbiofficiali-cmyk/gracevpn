@@ -8,12 +8,10 @@ class CoreVpnService : VpnService() {
 
     override fun onCreate() {
         super.onCreate()
-        // دمو: یک TUN ساده (اتصال واقعی مرحله بعد)
         val builder = Builder()
             .setSession("GraceVPN")
             .addAddress("10.0.0.2", 24)
             .addRoute("0.0.0.0", 0)
-
         tun = builder.establish()
     }
 
