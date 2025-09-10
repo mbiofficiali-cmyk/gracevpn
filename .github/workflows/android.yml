@@ -1,15 +1,6 @@
-name: Android CI
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -26,23 +17,35 @@ jobs:
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      - name: Grant execute permission for gradlew
+      - name: Make gradlew executable
         run: chmod +x gradlew
 
+      # 1) بیلد حتماً اجرا شود
       - name: Build Debug APK (save log)
-        run: ./gradlew --version && ./gradlew assembleDebug --stacktrace --info | tee gradle-build.log
+        run: ./gradlew clean :app:assembleDebug --stacktrace --info | tee gradle-build.log
 
-      - name: Upload APK (if exists)
-        if: always()
+      # 2) مسیر خروجی‌ها را نشان بده تا مطمئن شویم فایل کجاست
+      - name: Show build outputs
+        run: |
+          echo ">>>> Listing app/build/outputs"
+          ls -R app/build/outputs || true
+          echo ">>>> Searching for APKs"
+          find . -path "*outputs*" -name "*.apk" -print || true
+
+      # 3) آپلود APK با الگوی سراسری
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-            name: GraceVPN-debug-apk
-            path: app/build/outputs/apk/debug/app-debug.apk
-            if-no-files-found: warn
+          name: GraceVPN-debug-apk
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            **/outputs/**/debug/*.apk
+          if-no-files-found: warn
 
+      # لاگ بیلد (برای عیب‌یابی)
       - name: Upload build log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: gradle-build-log
-            path: gradle-build.log
+          name: gradle-build-log
+          path: gradle-build.log
