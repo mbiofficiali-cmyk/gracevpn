@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
 
     private val prepLauncher = registerForActivityResult(StartActivityForResult()) {
-        // در دمو فقط اجازه می‌گیریم
+        // بعد از گرفتن اجازه، سرویس را استارت می‌کنیم (نسخه دمو)
         startService(Intent(this, CoreVpnService::class.java))
     }
 
