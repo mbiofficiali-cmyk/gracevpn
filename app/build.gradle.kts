@@ -15,7 +15,7 @@ android {
         versionName = "1.0"
     }
 
-    // فعلاً ViewBinding لازم نداریم؛ اگر خواستی دوباره روشنش کن
+    // فعلاً ساده نگه می‌داریم
     // buildFeatures { viewBinding = true }
 
     buildTypes {
